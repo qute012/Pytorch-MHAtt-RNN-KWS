@@ -1,3 +1,7 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
 class KWS(nn.Module):
     def __init__(self, num_classes=len(CLASSES), in_channel=1, hidden_dim=128, n_head=4):
         super(KWS, self).__init__()
