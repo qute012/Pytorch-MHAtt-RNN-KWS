@@ -1,6 +1,17 @@
 from model import *
+from data import *
 import numpy as np
 import torch
+from data import CLASSES
+
+batch_size = 16
+
+train_dataset = SolarDataset()
+test_dataset = SolarDataset(mode='test')
+train_dataloader = data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True, pin_memory=True,
+                              collate_fn=_collate_fn, num_workers=4)
+test_dataloader = data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False, pin_memory=True,
+                             collate_fn=_collate_fn, num_workers=4)
 
 model = KWS().cuda()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
