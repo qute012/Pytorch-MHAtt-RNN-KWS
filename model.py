@@ -10,18 +10,19 @@ class KWS(nn.Module):
         self.hidden_dim = hidden_dim
         
         self.cnn_extractor = nn.Sequential(
-            nn.Conv2d(in_channel, 45, (3,1), stride=2),
+            nn.Conv2d(in_channel, 10, (5,1), stride=(1,1), dilation=(1,1)),
+            nn.BatchNorm2d(10),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(10, 1, (5,1), stride=(1,1), dilation=(1,1)),
             nn.BatchNorm2d(45),
             nn.ReLU(inplace=True),
-            nn.Conv2d(45, 45, (3,1), stride=2),
-            nn.BatchNorm2d(45),
             nn.AvgPool2d(2),
         )
         
-        self.rnn = nn.LSTM(45,self.hidden_dim, num_layers=2, bidirectional=True, 
+        self.rnn = nn.LSTM(1,self.hidden_dim, num_layers=2, bidirectional=True, 
                              batch_first=True)
         self.q_emb = nn.Linear(self.hidden_dim<<1, (self.hidden_dim<<1)*self.n_head)
-        self.dropout = nn.Dropout(0.2)
+        self.dropout = nn.Dropout(0.1)
         
         self.fc = nn.Sequential(
             nn.Linear(1024,64),
